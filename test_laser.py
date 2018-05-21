@@ -26,6 +26,7 @@ ser = serial.Serial(
           
 file = open("/home/pi/test/data.csv","w").close()      
 file = open("/home/pi/test/data.csv","a")
+
 def speed(x,y):
     ser.write(str(x))
     time.sleep(0.1)
@@ -42,27 +43,31 @@ def values(x,y,z):
 
 error_prev=0
 error_sum=0
+
 def log():
     
     for i in range(600):
         a=ser.readline()
         print a 
         file.write(a)
-ser.write('2')
-time.sleep(0.1)
-speed(30,30)
-time.sleep(4)
-ser.write('3')#step_response
-time.sleep(0.1)
-ser.write(str(90*381))#angle
 
-log()
-ser.write('a')
-time.sleep(0.1)
-ser.write('0')
-time.sleep(2)
+def set_angle(e_angle):
+    ser.write('2')
+    time.sleep(0.1)
+    speed(30,30)
+    time.sleep(4)
+    ser.write('3')#step_response
+    time.sleep(0.1)
+    ser.write(str(e_angle*379))#angle
 
-""""
+
+    #log()
+    #ser.write('a')
+    #time.sleep(0.1)
+    #ser.write('0')
+    #time.sleep(2)
+
+
 def PID(e_angle_current,Kp,Kd,Ki):
     
     
@@ -322,7 +327,7 @@ for j in range(-3,5):
                 e_angle = t_angle - c_angle
 
                 print ("Error angle: %5d"%e_angle)
-                PID(e_angle,Kp,Kd,Ki)
+                set_angle(e_angle)
 		        counter=counter+1
 
         if dots > 2:
